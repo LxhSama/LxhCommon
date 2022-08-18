@@ -268,44 +268,46 @@ public static class TypeExtensions
     public static string DisplayName([NotNull] this Type type, bool fullName = true)
     {
         StringBuilder sb = new StringBuilder();
-        ProcessType(sb, type, fullName);
+        getType(sb, type, fullName);
         return sb.ToString();
     }
 
     #region 私有方法
 
-    private static readonly Dictionary<Type, string> _builtInTypeNames = new Dictionary<Type, string>
+    private static readonly Dictionary<Type, string> typesName = new Dictionary<Type, string>
     {
-        { typeof(bool), "bool" },
+        { typeof(ushort), "ushort" },
         { typeof(byte), "byte" },
+        { typeof(sbyte), "sbyte" },
+        { typeof(int), "int" },
+        { typeof(long), "long" },
+        { typeof(uint), "uint" },
+        { typeof(ulong), "ulong" },
+        { typeof(short), "short" },
         { typeof(char), "char" },
+        { typeof(string), "string" },
+        { typeof(bool), "bool" },
+
         { typeof(decimal), "decimal" },
         { typeof(double), "double" },
         { typeof(float), "float" },
-        { typeof(int), "int" },
-        { typeof(long), "long" },
         { typeof(object), "object" },
-        { typeof(sbyte), "sbyte" },
-        { typeof(short), "short" },
-        { typeof(string), "string" },
-        { typeof(uint), "uint" },
-        { typeof(ulong), "ulong" },
-        { typeof(ushort), "ushort" },
         { typeof(void), "void" }
+
     };
 
-    private static void ProcessType(StringBuilder builder, Type type, bool fullName)
+    private static void getType(StringBuilder builder, Type type, bool fullName)
     {
         if (type.IsGenericType)
         {
             var genericArguments = type.GetGenericArguments();
-            ProcessGenericType(builder, type, genericArguments, genericArguments.Length, fullName);
+            getGenType(builder, type, genericArguments, genericArguments.Length, fullName);
         }
         else if (type.IsArray)
         {
-            ProcessArrayType(builder, type, fullName);
+            getarrType(builder, type, fullName);
         }
-        else if (_builtInTypeNames.TryGetValue(type, out var builtInName))
+        else if (typesName.TryGetValue(type, out var builtInName))
         {
             builder.Append(builtInName);
         }
@@ -315,7 +317,7 @@ public static class TypeExtensions
         }
     }
 
-    private static void ProcessArrayType(StringBuilder builder, Type type, bool fullName)
+    private static void getarrType(StringBuilder builder, Type type, bool fullName)
     {
         var innerType = type;
         while (innerType.IsArray)
@@ -323,7 +325,7 @@ public static class TypeExtensions
             innerType = innerType.GetElementType();
         }
 
-        ProcessType(builder, innerType, fullName);
+        getType(builder, innerType, fullName);
 
         while (type.IsArray)
         {
@@ -334,7 +336,7 @@ public static class TypeExtensions
         }
     }
 
-    private static void ProcessGenericType(StringBuilder builder, Type type, Type[] genericArguments, int length, bool fullName)
+    private static void getGenType(StringBuilder builder, Type type, Type[] genericArguments, int length, bool fullName)
     {
         var offset = type.IsNested ? type.DeclaringType.GetGenericArguments().Length : 0;
 
@@ -342,7 +344,7 @@ public static class TypeExtensions
         {
             if (type.IsNested)
             {
-                ProcessGenericType(builder, type.DeclaringType, genericArguments, offset, fullName);
+                getGenType(builder, type.DeclaringType, genericArguments, offset, fullName);
                 builder.Append('+');
             }
             else
@@ -364,7 +366,7 @@ public static class TypeExtensions
 
         for (var i = offset; i < length; i++)
         {
-            ProcessType(builder, genericArguments[i], fullName);
+            getType(builder, genericArguments[i], fullName);
             if (i + 1 == length)
             {
                 continue;
