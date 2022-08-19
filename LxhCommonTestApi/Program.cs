@@ -4,8 +4,14 @@ builder.AddLxhCommonServer(opts =>
 {
     opts.UseAll = false;
     opts.UseGrpcServer = false;
+    opts.UseAllFilter = true;
+    opts.UseIOC = true;
     opts.WebPort = 9998;
     opts.GrpcPort = 9999;
+    opts.NameSpace = null;
+    opts.FilterSpace = null;
+    opts.GrpcSpace = null;
+    opts.IOCSpace = null;
 });
 // Add services to the container.
 builder.Services.AddControllers();
