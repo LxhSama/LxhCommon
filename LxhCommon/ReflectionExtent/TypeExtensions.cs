@@ -13,6 +13,32 @@ namespace LxhCommon.Reflection;
 /// </summary>
 public static class TypeExtensions
 {
+
+    /// <summary>
+    /// 返回当前类型是否是指定基类的派生类
+    /// </summary>
+    /// <param name="type">当前类型</param>
+    /// <param name="baseType">要判断的基类型</param>
+    /// <returns></returns>
+    public static bool IsBaseOn(this Type type, Type baseType)
+    {
+        if (baseType.IsGenericTypeDefinition)
+        {
+            return baseType.IsGenericAssignableFrom(type);
+        }
+        return baseType.IsAssignableFrom(type);
+    }
+    /// <summary>
+    /// 返回当前类型是否是指定基类的派生类
+    /// </summary>
+    /// <typeparam name="TBaseType">要判断的基类型</typeparam>
+    /// <param name="type">当前类型</param>
+    /// <returns></returns>
+    public static bool IsBaseOn<TBaseType>(this Type type)
+    {
+        Type baseType = typeof(TBaseType);
+        return type.IsBaseOn(baseType);
+    }
     /// <summary>
     /// 返回当前类型是否是指定基类的派生类
     /// </summary>

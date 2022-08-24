@@ -1,4 +1,4 @@
-namespace LxhCommonTestApi
+namespace WebApplication1
 {
     public class WeatherForecast
     {

@@ -1,4 +1,6 @@
-﻿using LxhCommon.GrpcServcer.Extensions;
+﻿using LxhCommon.BaseEntity;
+using LxhCommon.DynamicApiSimple;
+using LxhCommon.GrpcServcer.Extensions;
 using LxhCommon.IOC;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +25,11 @@ public static class AppWebApplicationBuilderExtensions
         {
             builder.Services.AddIOC();
         }
+        if (options.UseAll || options.UseDynamicApi)
+        {
+            builder.Services.AddDynamicApi();
+        }
+     
         if (options.UseAll || options.UseAllFilter)
         {
             builder.Services.AddAllFilter();
@@ -31,20 +38,20 @@ public static class AppWebApplicationBuilderExtensions
         {
             //grpc模块
             builder.Services.AddGrpc();
-            //默认指定grpc为9090端口
-            builder.WebHost.UseKestrel(options =>
-            {
-                //webapi监听5000
-                options.Listen(System.Net.IPAddress.Any, AppWebApplicationBuilderExtensions.options.WebPort, listenOptions =>
-                {
-                    listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
-                });
-                //grpc到9090端口
-                options.Listen(System.Net.IPAddress.Any, AppWebApplicationBuilderExtensions.options.GrpcPort, listenOptions =>
-                {
-                    listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2;
-                });
-            });
+            ////默认指定grpc为9090端口
+            //builder.WebHost.UseKestrel(options =>
+            //{
+            //    //webapi监听5000
+            //    options.Listen(System.Net.IPAddress.Any, AppWebApplicationBuilderExtensions.options.WebPort, listenOptions =>
+            //    {
+            //        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
+            //    });
+            //    //grpc到9090端口
+            //    options.Listen(System.Net.IPAddress.Any, AppWebApplicationBuilderExtensions.options.GrpcPort, listenOptions =>
+            //    {
+            //        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2;
+            //    });
+            //});
         }
         return builder;
     }
@@ -66,6 +73,7 @@ public static class AppWebApplicationBuilderExtensions
         public bool UseAllFilter = true;
         //开启IOC服务
         public bool UseIOC = true;
+        public bool UseDynamicApi = true;
         //过滤总空间
         public string NameSpace = null;
         //加载grpc时再次过滤
@@ -74,10 +82,10 @@ public static class AppWebApplicationBuilderExtensions
         public string FilterSpace = null;
         //加载IOC时再次过滤
         public string IOCSpace = null;
-        //指定web端口
-        public int WebPort = 5000;
-        //指定grpc端口
-        public int GrpcPort = 9090;
+        ////指定web端口
+        //public int WebPort = 5000;
+        ////指定grpc端口
+        //public int GrpcPort = 9090;
         //过滤末尾命名空间
         public string[] ExcludeAssemblyNames = new string[]{"Default"};
     }

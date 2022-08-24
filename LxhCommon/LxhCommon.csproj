@@ -8,8 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ConfigurableOptions\**" />
+    <Compile Remove="DynamicApiController\**" />
     <Compile Remove="ReflectionExtent\Proxies\**" />
+    <EmbeddedResource Remove="ConfigurableOptions\**" />
+    <EmbeddedResource Remove="DynamicApiController\**" />
     <EmbeddedResource Remove="ReflectionExtent\Proxies\**" />
+    <None Remove="ConfigurableOptions\**" />
+    <None Remove="DynamicApiController\**" />
     <None Remove="ReflectionExtent\Proxies\**" />
   </ItemGroup>
 

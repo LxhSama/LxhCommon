@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using test1Model;
+using static test1.Test1;
 
-namespace LxhCommonTestApi.Controllers
+namespace WebApplication1.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -13,11 +13,10 @@ namespace LxhCommonTestApi.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly ITest1 test1;
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, ITest1 test1)
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
-            this.test1 = test1;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
@@ -31,10 +30,6 @@ namespace LxhCommonTestApi.Controllers
             })
             .ToArray();
         }
-        [HttpGet]
-        public string Hello()
-        {
-            return test1.sayHello();
-        }
+
     }
 }

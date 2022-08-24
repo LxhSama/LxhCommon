@@ -1,7 +1,6 @@
 ﻿namespace test1Model
 {
-    public interface ITest1
+    public record Test1Model
     {
-        string sayHello();
     }
 }

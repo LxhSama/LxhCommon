@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LxhCommonTestApi", "LxhComm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LxhCommon", "LxhCommon\LxhCommon.csproj", "{8467702B-9943-402E-8CB6-EEA26D6DB0FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test1", "test1\test1.csproj", "{B7393B20-55C2-4451-A6C1-7ED779761121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test1", "test1\test1.csproj", "{B7393B20-55C2-4451-A6C1-7ED779761121}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test1Model", "test1Model\test1Model.csproj", "{599BD725-1EDE-4294-8167-47D7E6180E89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test1Model", "test1Model\test1Model.csproj", "{599BD725-1EDE-4294-8167-47D7E6180E89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test1Interface", "test1Interface\test1Interface.csproj", "{067D3F85-1F77-4932-848E-EB4B35A86883}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test1Interface", "test1Interface\test1Interface.csproj", "{067D3F85-1F77-4932-848E-EB4B35A86883}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
