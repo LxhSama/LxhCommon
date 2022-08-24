@@ -1,27 +1,35 @@
 # LXHCommon说明
 ## 整体说明
  1.该包是一个包含各类通用文件和方法的库，目前集成有:
-  																			IOC扫描注入，
-																			 	Filter扫描注入，
- 																				GRPC类自动注入。
+  																		IOC扫描注入，
+																		  Filter扫描注入，
+ 																		 GRPC类自动注入,
+
+​																		 动态API自动加载.
+
  帮助类包含一个反射帮助类，以及一个全局事务filter。
  后续会持续补充各种用法和方法。该包不仅包含架构层的内容还有类似文件上传，LINQ扩展等等。
  只要我想到可以公用的轮子都可能会放上, 欢迎大家提供轮子需要和思路
  github地址：https://github.com/LxhSama/LxhCommon 
+
  ## 使用方法
  1.Install-Package LxhCommon 使用最新版（目前是1.0）
  该库适用在.net6的项目中，如果是webapi项目,入口时提供的builder和WebApplication可作为调用方法.
  如果是在非WEBAPi项目中，可使用的为公共库，如反射的帮助方法。
  2.代码使用
+
 ``` c#
- 			builder.AddLxhCommonServer(opts => 
+//新增顺序要求，如果开启动态api必须在AddController()后执行
+builder.AddLxhCommonServer(opts => 
 {
     opts.UseAll = true; //是否注入全部服务，已有的IOC，FIlter注入，GPPC注入等
     opts.UseGrpcServer = false;//单独开启GRPC注入
     opts.UseAllFilter = true;//单独开启过滤器注入，这里需要注意的点见注意点2
     opts.UseIOC = true;//单独开启IOC注入，用法见注意点1
-    opts.WebPort = 9998;//web端口
-    opts.GrpcPort = 9999;//grpc端口
+    opts.UseDynamicApi=true;//开启动态APi加载
+    //暂时不用
+    //opts.WebPort = 9998;//web端口
+    //opts.GrpcPort = 9999;//grpc端口
     opts.NameSpace = null;//不为null则只取以该字段开头的命名空间
     opts.FilterSpace = null;//在总过滤后为加载Filter单独过滤命名空间
     opts.GrpcSpace = null;//在过滤后为加载Grpc单独过滤命名空间
@@ -32,6 +40,38 @@ app.run前使用app.UseLxhCommon()//见注意点3
 
 ```
 具体使用实例请查看github。
+
+3.如何使用动态API
+
+​		提供两种使用方法，一种是继承自接口(IDynamicApi)还有一种是打上特性，推荐使用特性(DynamicApi)方式不要使用接口
+
+​		api格式为api/[controllername]/[action] 一般不用打接口谓词标签，遵循约定即可.以下为对应的字典。如方法名GetList开头自动为Get
+
+​        Addxx自动为Post。。。
+
+​        正常写类即可。将该类加入到主项目中，将会自动注入
+
+```c#
+
+            ["get"] = "GET",
+            ["find"] = "GET",
+            ["fetch"] = "GET",
+            ["query"] = "GET",
+            ["post"] = "POST",
+            ["add"] = "POST",
+            ["create"] = "POST",
+            ["insert"] = "POST",
+            ["submit"] = "POST",
+            ["put"] = "POST",
+            ["update"] = "POST",
+            ["delete"] = "DELETE",
+            ["remove"] = "DELETE",
+            ["clear"] = "DELETE",
+            ["patch"] = "PATCH"
+```
+
+
+
  ## 注意点
  1.单独的类，标注特性 [IOCService] 即可,不指定也会有默认作用范围.接口的实现类上标注 [IOCService(ServiceType= typeof(IType))] 即可完成实现类到接口的IOC注入。
 
