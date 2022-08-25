@@ -2,6 +2,7 @@
 using LxhCommon.DynamicApiSimple;
 using LxhCommon.GrpcServcer.Extensions;
 using LxhCommon.IOC;
+using LxhCommon.Swagger;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -53,6 +54,10 @@ public static class AppWebApplicationBuilderExtensions
             //    });
             //});
         }
+        if (options.UseAll || options.UseSwagger)
+        {
+            builder.Services.AddSwaggerConfig();
+        }
         return builder;
     }
     public static void UseLxhCommon(this IApplicationBuilder app)
@@ -61,6 +66,10 @@ public static class AppWebApplicationBuilderExtensions
         {
             app.useMyGrpcServices(options.GrpcSpace);
         }
+        if (options.UseAll || options.UseSwagger)
+        {
+            app.UseLxhSwagger();
+        }
     }
 
     public class Options
@@ -68,12 +77,13 @@ public static class AppWebApplicationBuilderExtensions
         //开启全部服务
         public bool UseAll = true;
         //开启GRPC服务
-        public bool UseGrpcServer = true;
+        public bool UseGrpcServer = false;
         //开启注册filter服务
-        public bool UseAllFilter = true;
+        public bool UseAllFilter = false;
         //开启IOC服务
-        public bool UseIOC = true;
-        public bool UseDynamicApi = true;
+        public bool UseIOC = false;
+        public bool UseDynamicApi = false;
+        public bool UseSwagger = false;
         //过滤总空间
         public string NameSpace = null;
         //加载grpc时再次过滤
@@ -82,6 +92,8 @@ public static class AppWebApplicationBuilderExtensions
         public string FilterSpace = null;
         //加载IOC时再次过滤
         public string IOCSpace = null;
+        //加载API时再次过滤
+        public string ApiSpace = null;
         ////指定web端口
         //public int WebPort = 5000;
         ////指定grpc端口

@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.Extensions.Options;
 
 namespace LxhCommon.DynamicApiSimple;
 
@@ -10,8 +11,12 @@ class ApiFeatureProvider : ControllerFeatureProvider
     {
         Type type = typeInfo.AsType();
         // 不能是非公开的、值类型、抽象类、泛型类或基元类型
+        if (!type.IsPublic || type.IsValueType || type.IsAbstract || type.IsGenericType || type.IsPrimitive || string.IsNullOrWhiteSpace(type.Namespace)) return false;
+        if (Assemblies.options.ApiSpace != null)
+        {
+            if (!type.Namespace.StartsWith(Assemblies.options.ApiSpace)) return false;
+        }
 
-        if (!type.IsPublic || type.IsValueType || type.IsAbstract || type.IsGenericType || type.IsPrimitive) return false;
         // 原生层或者实现IDynamicApiController（类）,[DynamicApi](接口)
         if ((!typeof(Controller).IsAssignableFrom(type) && typeof(ControllerBase).IsAssignableFrom(type))|| type.IsDefined(typeof(DynamicApiAttribute), true) || typeof(IDynamicApi).IsAssignableFrom(type))
         {

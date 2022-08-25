@@ -25,7 +25,6 @@ namespace LxhCommon.Filters.TransactionScopes
 				return;
 			}
 			using var txScope =new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-            Console.WriteLine("执行了");
 			var result = await next();
 			if (result.Exception == null)
 			{

@@ -11,9 +11,20 @@ class ApiConvention : IApplicationModelConvention
     {
         foreach (var controller in application.Controllers)
         {
+            List<ActionModel> dic = new List<ActionModel>();
             var type = controller.ControllerType;
             if (typeof(IDynamicApi).IsAssignableFrom(type) || type.IsDefined(typeof(DynamicApiAttribute),true))
             {
+                //foreach (ActionModel action in controller.Actions)
+                //{
+                //    if (!action.ActionMethod.DeclaringType.Assembly.Equals(type.Assembly))
+                //    {
+                //        dic.Add(action);
+                //    }
+                //}
+                //dic.ForEach(it => {
+                //    controller.Actions.Remove(it);
+                //});
                 ConfigureApiExplorer(controller);
                 ConfigureSelector(controller);
             }
