@@ -1,4 +1,5 @@
 ﻿using LxhCommon.BaseEntity;
+using LxhCommon.CacheHelper;
 using LxhCommon.DynamicApiSimple;
 using LxhCommon.GrpcServcer.Extensions;
 using LxhCommon.IOC;
@@ -14,7 +15,7 @@ public static class AppWebApplicationBuilderExtensions
     public static WebApplicationBuilder AddLxhCommonServer(this WebApplicationBuilder builder, Action<Options> opts = null)
     {
         options = new Options();
-        if (options == null)
+        if (options == null || opts==null)
         {
             options.UseAll = true;
         }
@@ -39,7 +40,7 @@ public static class AppWebApplicationBuilderExtensions
         {
             //grpc模块
             builder.Services.AddGrpc();
-            ////默认指定grpc为9090端口
+            ////默认指定grpc为9090端口 
             //builder.WebHost.UseKestrel(options =>
             //{
             //    //webapi监听5000
@@ -57,6 +58,20 @@ public static class AppWebApplicationBuilderExtensions
         if (options.UseAll || options.UseSwagger)
         {
             builder.Services.AddSwaggerConfig();
+        }
+        if (options.UseAll || options.UseCache)
+        { 
+            builder.Services.AddMemoryCache();
+            builder.Services.AddScoped<IMemoryCacheHelper, MemoryCacheHelper>();
+            if (!string.IsNullOrWhiteSpace(options.RedisCoon))
+            {
+                builder.Services.AddStackExchangeRedisCache(opt =>
+                {
+                    opt.Configuration = options.RedisCoon;
+                    opt.InstanceName = options.RedisStartName;
+                });
+                builder.Services.AddScoped<IDistributedCacheHelper, DistributedCacheHelper>();
+            }
         }
         return builder;
     }
@@ -84,6 +99,7 @@ public static class AppWebApplicationBuilderExtensions
         public bool UseIOC = false;
         public bool UseDynamicApi = false;
         public bool UseSwagger = false;
+        public bool UseCache = false;
         //过滤总空间
         public string NameSpace = null;
         //加载grpc时再次过滤
@@ -94,6 +110,10 @@ public static class AppWebApplicationBuilderExtensions
         public string IOCSpace = null;
         //加载API时再次过滤
         public string ApiSpace = null;
+
+        public string RedisCoon = null;
+
+        public string RedisStartName = "";
         ////指定web端口
         //public int WebPort = 5000;
         ////指定grpc端口
@@ -103,3 +123,4 @@ public static class AppWebApplicationBuilderExtensions
     }
 }
 
+ 
