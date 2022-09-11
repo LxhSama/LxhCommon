@@ -27,6 +27,9 @@ builder.AddLxhCommonServer(opts =>
     opts.UseAllFilter = true;//单独开启过滤器注入，这里需要注意的点见注意点2
     opts.UseIOC = true;//单独开启IOC注入，用法见注意点1
     opts.UseDynamicApi=true;//开启动态APi加载
+    opts.UseSwagger = false;
+    opts.UseCache = true;//开启内存缓存
+    opts.RedisCoon = "";//开启Redis缓存
     //暂时不用
     //opts.WebPort = 9998;//web端口
     //opts.GrpcPort = 9999;//grpc端口
@@ -35,6 +38,7 @@ builder.AddLxhCommonServer(opts =>
     opts.GrpcSpace = null;//在过滤后为加载Grpc单独过滤命名空间
     opts.IOCSpace = null;//在过滤后为加载IOC单独过滤命名空间
 });
+//Swaager已经加入，开启swagger必须调用app.UseLxhCommon()
 //目前没有顺序要求不排除未来没有,目前只对GRPC注入时有要求使用，不打开grpc服务不需要使用该方法。后续有用到会修改说明.
 app.run前使用app.UseLxhCommon()//见注意点3
 
@@ -78,3 +82,17 @@ app.run前使用app.UseLxhCommon()//见注意点3
  2.Filter必须继承自IMyAsyncActionFilter,IMyAsyncAuthorizationFilter,IMyAsyncExceptionFilter,IMyAsyncResultFilter其中的一种才会进行注入。用法与微软官方的分类相同。接口中有一个Order属性必须实现，可指定为0，如果需要排序，使用Order值改变执行顺序
 
  3.UseLxhCommon里使用了app.UseRouting()
+
+4.swagger加入了默认的jwt支持，可以直接开启
+
+5.开启缓存，缓存使用方法是注入IMemoryCacheHelper和IDistributedCacheHelper
+
+通用的方法,GetOrCreate[Async]
+
+Remove 源自杨老师最后大项目
+
+另封装了RedisHelper 可以注入ICacheManager使用,具体字段请见项目内
+
+## **卫星**
+
+1.1.5 IOC支持属性注入方式

@@ -1,3 +1,5 @@
+using LxhCommon;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +18,7 @@ builder.AddLxhCommonServer(opts =>
     opts.FilterSpace = null;
     opts.GrpcSpace = null;
     opts.IOCSpace = null;
+    opts.RedisCoon = "47.100.244.50";
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -36,5 +39,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseLxhCommon();
-
+Console.WriteLine(IdHelper.NextId().ToString());
 app.Run();
