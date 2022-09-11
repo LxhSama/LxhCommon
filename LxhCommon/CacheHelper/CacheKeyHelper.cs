@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Zack.ASPNETCore
+namespace LxhCommon
 {
     public static class CacheKeyHelper
     {

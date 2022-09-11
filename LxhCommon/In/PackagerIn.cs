@@ -1,10 +1,11 @@
-﻿using LxhCommon.BaseEntity;
+﻿
+using LxhCommon;
+using LxhCommon.Cache;
 using LxhCommon.CacheHelper;
 using LxhCommon.DynamicApiSimple;
 using LxhCommon.GrpcServcer.Extensions;
 using LxhCommon.IOC;
 using LxhCommon.Swagger;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -60,11 +61,12 @@ public static class AppWebApplicationBuilderExtensions
             builder.Services.AddSwaggerConfig();
         }
         if (options.UseAll || options.UseCache)
-        { 
+        {
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IMemoryCacheHelper, MemoryCacheHelper>();
             if (!string.IsNullOrWhiteSpace(options.RedisCoon))
             {
+                builder.Services.AddScoped<ICache, RedisCache>();
                 builder.Services.AddStackExchangeRedisCache(opt =>
                 {
                     opt.Configuration = options.RedisCoon;
@@ -72,6 +74,7 @@ public static class AppWebApplicationBuilderExtensions
                 });
                 builder.Services.AddScoped<IDistributedCacheHelper, DistributedCacheHelper>();
             }
+            IdHelper.initIdWorker();
         }
         return builder;
     }
