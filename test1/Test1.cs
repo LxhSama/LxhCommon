@@ -23,6 +23,11 @@ namespace test1
         {
             return "Hello" + id;
         }
+
+        public string SayBye()
+        {
+            return "Bye";
+        }
         public  class n { public string Name { get; set; } }
     }
 }

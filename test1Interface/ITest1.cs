@@ -4,5 +4,7 @@ namespace test1Interface
     public interface ITest1
     {
         public string SayHello();
+
+        public string SayBye();
     }
 }

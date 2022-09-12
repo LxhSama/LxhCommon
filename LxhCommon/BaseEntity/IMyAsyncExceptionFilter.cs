@@ -9,6 +9,6 @@ namespace LxhCommon.BaseEntity
 {
     internal interface IMyAsyncExceptionFilter : IAsyncExceptionFilter, IFilter
     {
-        public int Order { get;}
+        public int Order { get; set;}
     }
 }

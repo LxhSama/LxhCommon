@@ -1,5 +1,6 @@
 ﻿
 using LxhCommon;
+using LxhCommon.BaseEntity;
 using LxhCommon.Cache;
 using LxhCommon.CacheHelper;
 using LxhCommon.DynamicApiSimple;
@@ -16,7 +17,7 @@ public static class AppWebApplicationBuilderExtensions
     public static WebApplicationBuilder AddLxhCommonServer(this WebApplicationBuilder builder, Action<Options> opts = null)
     {
         options = new Options();
-        if (options == null || opts==null)
+        if (options == null || opts == null)
         {
             options.UseAll = true;
         }
@@ -32,7 +33,7 @@ public static class AppWebApplicationBuilderExtensions
         {
             builder.Services.AddDynamicApi();
         }
-     
+
         if (options.UseAll || options.UseAllFilter)
         {
             builder.Services.AddAllFilter();
@@ -88,6 +89,11 @@ public static class AppWebApplicationBuilderExtensions
         {
             app.UseLxhSwagger();
         }
+        if (options.UseAll || options.UseIOC)
+        {
+            ServiceLocator.Instance = app.ApplicationServices;
+        }
+        
     }
 
     public class Options

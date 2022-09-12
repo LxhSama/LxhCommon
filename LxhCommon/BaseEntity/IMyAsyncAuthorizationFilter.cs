@@ -9,6 +9,6 @@ namespace LxhCommon.BaseEntity
 {
     public interface IMyAsyncAuthorizationFilter: IAsyncAuthorizationFilter,IFilter
     {
-        public int Order { get; }
+        public int Order { get; set; }
     }
 }

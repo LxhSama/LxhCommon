@@ -39,5 +39,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseLxhCommon();
+
 Console.WriteLine(IdHelper.NextId().ToString());
 app.Run();

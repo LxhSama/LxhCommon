@@ -8,7 +8,7 @@ namespace LxhCommon.Filters.TransactionScopes
 {
     public class TransactionScopeFilter : IMyAsyncActionFilter
 	{
-		public int Order { get => 0; }
+		public int Order { get; set; } = 0;
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
